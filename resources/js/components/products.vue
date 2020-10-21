@@ -54,6 +54,20 @@
                                             <div class="col-lg-5">
                                                 <input type="number" name="cantidad" placeholder="Cantidad" v-model="dato.cantidad" class="form-control">
                                             </div>
+                                            <label class="col-lg-1 col-form-label">Tipo</label>
+                                            <div class="col-lg-5">
+                                                <select required class="form-control" v-model="dato.tipo">
+                                                    <option value="">Seleccionar...</option>
+                                                    <option value="COMIDA">COMIDA</option>
+                                                    <option value="BEBIDA">BEBIDA</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-lg-2 col-form-label">Fotografia</label>
+                                            <div class="col-lg-10">
+                                                <input type="file" name="image" @change="getImage" accept="image/*" required>
+                                            </div>
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-danger" data-dismiss="modal"> <i class="fa fa-trash"></i> Cancelar</button>
@@ -89,6 +103,20 @@
                                             <div class="col-lg-5">
                                                 <input type="number" step="0.01"  name="cantidad" placeholder="Cantidad" v-model="dato.cantidad" class="form-control">
                                             </div>
+                                            <label class="col-lg-1 col-form-label">Tipo</label>
+                                            <div class="col-lg-5">
+                                                <select name="" id="" class="form-control" v-model="dato.tipo">
+                                                    <option value="">Seleccionar...</option>
+                                                    <option value="COMIDA">COMIDA</option>
+                                                    <option value="BEBIDA">BEBIDA</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-lg-2 col-form-label">Fotografia</label>
+                                            <div class="col-lg-10">
+                                                <input type="file" id="imgUpdate" name="image" @change="getImage" accept="image/*" >
+                                            </div>
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-danger" data-dismiss="modal"> <i class="fa fa-trash"></i> Cancelar</button>
@@ -118,7 +146,12 @@
                             <td>{{ i.nombre }}</td>
                             <td>{{ i.precio }}</td>
                             <td>{{ i.cantidad }}</td>
-                            <td>{{ i.photo }}</td>
+                            <td>{{ i.tipo }}</td>
+                            <td>
+                                <a :href="i.photo" target="_blank" >
+                                    <img :src="i.photo" alt="" width="50">
+                                </a>
+                            </td>
                             <td>
                                 <span class="badge " :class="i.estado=='VISIBLE'?'badge-primary':'badge-warning'">{{ i.estado }}</span>
                             </td>
@@ -151,10 +184,15 @@ export default {
         return {
             datatable:null,
             datos:[],
-            dato:{}
+            dato:{},
+            imagen : null,
         }
     },
     methods:{
+        getImage(event){
+            //Asignamos la imagen a  nuestra data
+            this.imagen = event.target.files[0];
+        },
         crear(){
             this.dato={};
             $('#crear').modal('show');
@@ -166,7 +204,16 @@ export default {
             });
         },
         guardar(){
-            axios.post('/product',this.dato).then(res=>{
+            let data=new FormData();
+            data.append('nombre',this.dato.nombre);
+            data.append('cantidad',this.dato.cantidad);
+            data.append('precio',this.dato.precio);
+            data.append('tipo',this.dato.tipo);
+            data.append('image',this.imagen);
+            // data.append('nombre',this.dato.nombre);
+            // data.append('nombre',this.dato.nombre);
+
+            axios.post('/product',data).then(res=>{
                 this.misdatos();
                 $('#crear').modal('hide');
                 this.$toast.open({
@@ -192,8 +239,18 @@ export default {
             })
         },
         update(){
-            axios.put('/product/'+this.dato.id,this.dato).then(res=>{
+            let data=new FormData();
+            data.append('nombre',this.dato.nombre);
+            data.append('cantidad',this.dato.cantidad);
+            data.append('precio',this.dato.precio);
+            data.append('tipo',this.dato.tipo);
+            data.append('image',this.imagen);
+            // data.append('_method', 'PUT');
+            axios.post('/product/'+this.dato.id,data).then(res=>{
+                // console.log('asaa');
                 // console.log(res.data);
+                // return false;
+                $('#imgUpdate').val('');
                 this.misdatos();
                 $('#modificar').modal('hide');
                 this.$toast.open({

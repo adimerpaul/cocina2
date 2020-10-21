@@ -31,6 +31,7 @@ Route::get('/reporte', function () {
 
 Auth::routes();
 Route::resource('/product',App\Http\Controllers\ProductController::class)->middleware('auth');
+Route::post('/product/{id}',[\App\Http\Controllers\ProductController::class,'modificar'])->middleware('auth');
 Route::resource('/sale',App\Http\Controllers\SaleController::class)->middleware('auth');
 Route::get('/consulta/{d1}/{d2}',[\App\Http\Controllers\SaleController::class,'consulta'])->middleware('auth');
 Route::get('/productSale',[\App\Http\Controllers\ProductController::class,'productSale'])->middleware('auth');

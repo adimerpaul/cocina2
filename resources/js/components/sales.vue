@@ -1,16 +1,27 @@
 <template>
     <div class="row">
-        <div v-for="i in datos" class="col-md-3">
+        <div class="col-md-12">
+            <h3>Total de ventas del dia: {{total}} Bs.</h3>
+        </div>
+        <div v-for="i in datos" class="col-md-2">
             <div class="ibox">
                 <div class="ibox-content product-box">
-                    <div class="product-imitation">
-                        {{i.nombre}}
+                    <div class="product-imitation" style="
+                    background-size: 100% 100%;
+                    background-repeat: no-repeat;"
+                    v-bind:style="{ backgroundImage: 'url(' + i.photo + ')' }"
+                    >
+                        <div style="color: white;background: rgba(0,0,0,0.5)">{{i.nombre}}</div>
                     </div>
                     <div class="product-desc">
                                 <span class="product-price">
                                     Bs {{i.precio}}
                                 </span>
-                        <small class="text-muted">Disponible {{i.cantidad}}</small>
+                        <div class="text-muted">Disponibles {{i.cantidad}}</div>
+                        <div class="text-muted">Vendidos {{i.sale.length}}</div>
+                        <div class="text-muted">Bs. <label v-for="i in i.ventas">{{i.total}}</label></div>
+
+<!--                        <div class="text-muted">Bs. {{i.ventas[0]}}</div>-->
 <!--                        <a href="#" class="product-name"> Product</a>-->
 <!--                        <div class="small m-t-xs">-->
 <!--                            Many desktop publishing packages and web page editors now.-->
@@ -37,7 +48,7 @@ export default {
             datatable:null,
             datos:[],
             dato:{},
-            products:[],
+            // products:[],
         }
     },
     methods:{
@@ -62,71 +73,12 @@ export default {
                 // console.log(this.datos);
             });
         },
-        guardar(){
-            axios.post('/product',this.dato).then(res=>{
-                this.misdatos();
-                $('#crear').modal('hide');
-                this.$toast.open({
-                    message: "Dato creado",
-                    type: "success",
-                    duration: 3000,
-                    dismissible: true
-                });
-                this.dato={};
-            })
-        },
-        update(){
-            axios.put('/product/'+this.dato.id,this.dato).then(res=>{
-                // console.log(res.data);
-                this.misdatos();
-                $('#modificar').modal('hide');
-                this.$toast.open({
-                    message: "Dato modificado",
-                    type: "warning",
-                    duration: 3000,
-                    dismissible: true
-                });
-                this.dato={};
-            })
-        },
-        actualizar(){
-            this.misdatos();
-            this.$toast.open({
-                message: "Datos Actualizados",
-                type: "success",
-                duration: 2000,
-                dismissible: true
-            })
-        },
-        modificar(i){
-            $('#modificar').modal('show');
-            this.dato=i;
-        },
-        eliminar(i){
-            this.$fire({
-                title: 'Seguro de eliminar??',
-                // text: "You won't be able to revert this!",
-                type: 'question',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Si!'
-            }).then((r) => {
-                if (r.value){
-                    axios.delete('/product/'+i.id).then(res=>{
-                        this.misdatos();
-                        // $('#modal-default').modal('hide');
-                        this.$toast.open({
-                            message: "Dato Eliminado",
-                            type:"error",
-                            duration: 3000,
-                            dismissible: true
-                        });
-                        this.dato={};
-                    })
-                }
-            })
-        },
+        // vendidos:async function (i){
+        //     await axios.get('/sale/'+i.id).then(async res=>{
+        //         // console.log(res.data.length)
+        //          return await res.data.length;
+        //     })
+        // }
     },
     computed:{
         reg:function (){
@@ -135,7 +87,20 @@ export default {
                 return false;
             else
                 return true;
+        },
+        total:function (){
+            let t=0;
+            this.datos.forEach(r=>{
+                // console.log(r.ventas);
+                if (r.ventas.length==1){
+                    // console.log(r.ventas[0].total);
+                    t+=r.ventas[0].total;
+                }
+                // t+=
+            })
+            return t;
         }
+
     }
 }
 </script>

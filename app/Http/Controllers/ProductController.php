@@ -36,11 +36,14 @@ class ProductController extends Controller
     public function store(Request $request)
     {
 //        Product::create($request->all());
+        $path = $request->file('image')->store('image');
         $d=new Product();
         $d->nombre=$request->nombre;
         $d->cantidad=$request->cantidad;
         $d->precio=$request->precio;
-        $d->photo='';
+        $d->tipo=$request->tipo;
+        $d->photo=$path;
+//        $d->photo='';
         $d->save();
     }
 
@@ -62,7 +65,7 @@ class ProductController extends Controller
 
     public function productSale()
     {
-        return Product::where('estado','=','VISIBLE')->get();
+        return Product::where('estado','=','VISIBLE')->with('sale')->with('ventas')->get();
     }
 
     /**
@@ -85,12 +88,36 @@ class ProductController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $request->hasFile('image')?$path=$request->file('image')->store('image'):$path="";
         $d=Product::find($id);
         $d->nombre=$request->nombre;
         $d->cantidad=$request->cantidad;
         $d->precio=$request->precio;
-        $d->photo='';
+        $d->photo=$path;
+        $d->tipo=$request->tipo;
         $d->save();
+//        $_POST['image'];
+    }
+    public function modificar(Request $request, $id)
+    {
+        $d=Product::find($id);
+        $d->nombre=$request->nombre;
+        $d->cantidad=$request->cantidad;
+        $d->precio=$request->precio;
+        if ($request->hasFile('image')) {
+            $request->image!=''?$path=$request->file('image')->store('image'):$path="";
+        }else{
+            $path="";
+        }
+        if ($path==""){
+
+        }else{
+            $d->photo=$path;
+        }
+        $d->tipo=$request->tipo;
+        $d->save();
+//        var_dump($_POST['image']);
+//        return  $id;
     }
 
     /**

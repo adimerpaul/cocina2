@@ -54,9 +54,12 @@ class SaleController extends Controller
      * @param  \App\Models\Sale  $sale
      * @return \Illuminate\Http\Response
      */
-    public function show(Sale $sale)
+    public function show($id)
     {
-        //
+        return Sale::with('product')
+            ->where('product_id','=',$id)
+            ->whereDate('created_at','=',now())
+            ->get();
     }
 
     /**
