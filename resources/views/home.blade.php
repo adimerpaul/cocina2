@@ -74,7 +74,17 @@
                     >
                         <li class="treeview" :class="[isActive && 'active', isExactActive && '']">
                             <a :href="href" @click="navigate">
-                                <i class="fa fa-envelope"></i> <span class="nav-label">Ventas </span>
+                                <i class="fa fa-money"></i> <span class="nav-label">Venta Rapida</span>
+                            </a>
+                        </li>
+                    </router-link>
+                    <router-link
+                        to="/venta"
+                        v-slot="{ href, route, navigate, isActive, isExactActive }"
+                    >
+                        <li class="treeview" :class="[isActive && 'active', isExactActive && '']">
+                            <a :href="href" @click="navigate">
+                                <i class="fa fa-shopping-cart"></i> <span class="nav-label">Venta Personal</span>
                             </a>
                         </li>
                     </router-link>

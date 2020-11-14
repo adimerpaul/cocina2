@@ -25,6 +25,9 @@ Route::get('/products', function () {
 Route::get('/sales', function () {
     return view('home');
 })->middleware('auth');
+Route::get('/venta', function () {
+    return view('home');
+})->middleware('auth');
 Route::get('/reporte', function () {
     return view('home');
 })->middleware('auth');
@@ -33,6 +36,7 @@ Auth::routes();
 Route::resource('/product',App\Http\Controllers\ProductController::class)->middleware('auth');
 Route::post('/product/{id}',[\App\Http\Controllers\ProductController::class,'modificar'])->middleware('auth');
 Route::resource('/sale',App\Http\Controllers\SaleController::class)->middleware('auth');
+Route::post('/sales',[App\Http\Controllers\SaleController::class,'sales'])->middleware('auth');
 Route::get('/consulta/{d1}/{d2}',[\App\Http\Controllers\SaleController::class,'consulta'])->middleware('auth');
 Route::get('/productSale',[\App\Http\Controllers\ProductController::class,'productSale'])->middleware('auth');
 //Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

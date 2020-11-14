@@ -25,10 +25,12 @@ import home from './components/home';
 import products from './components/products';
 import sales from './components/sales';
 import reporte from './components/reporte';
+import venta from './components/venta';
 const routes = [
     { path: '/home', component: home },
     { path: '/products', component: products },
     { path: '/sales', component: sales },
+    { path: '/venta', component: venta },
     { path: '/reporte', component: reporte },
 ]
 const router = new VueRouter({
