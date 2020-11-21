@@ -1,6 +1,6 @@
 <template>
     <div class="row">
-        <div class="col-md-10">
+        <div class="col-md-9">
             <div class="row">
                 <div class="col-md-12">
                     <h3>
@@ -17,7 +17,7 @@
                             <div class="product-imitation" style="
                     background-size: 100% 100%;
                     background-repeat: no-repeat;
-                    padding: 35px"
+                    "
                                  v-bind:style="{ backgroundImage: 'url(' + i.photo + ')' }"
                             >
                                 <div style="color: white;background: rgba(0,0,0,0.5)">{{i.nombre}}</div>
@@ -26,9 +26,9 @@
                                 <span class="product-price">
                                     Bs {{i.precio}}
                                 </span>
-                                <!--                        <div class="text-muted">Disponib: <b>{{i.cantidad}}</b></div>-->
-                                <!--                        <div class="text-muted">Vendidos: <b>{{i.sale.length}}</b></div>-->
-                                <!--                        <div class="text-muted">En Bolivi.: <b><label v-for="i in i.ventas">{{i.total}}</label></b></div>-->
+<!--                                                        <div class="text-muted">Disponib: <b>{{i.cantidad}}</b></div>-->
+<!--                                                        <div class="text-muted">Vendidos: <b>{{i.sale.length}}</b></div>-->
+<!--                                                        <div class="text-muted">En Bolivi.: <b><label v-for="i in i.ventas">{{i.total}}</label></b></div>-->
                                 <!--                                                <div class="text-muted">Bs. {{i.ventas[0]}}</div>-->
                                 <!--                                                <a href="#" class="product-name"> Product</a>-->
                                 <div class="small m-t-xs" style="padding: 0px;margin:0px;border: 0px">
@@ -86,9 +86,32 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-2">
+        <div class="col-md-3">
             <h3>Productos</h3>
-            <label v-for="i in ventas">{{i.nombre}} {{i.precio}}Bs</label>
+            <table class="table">
+                <tr>
+                    <th>#</th>
+                    <th>Nombre</th>
+                    <th>Precio</th>
+                    <th>Cantidad</th>
+                    <th>Subtotal</th>
+                </tr>
+                <tr v-for="(i,index) in ventas" :key="index">
+                    <td>{{index+1}}</td>
+                    <td>{{i.nombre}}</td>
+                    <td>{{i.precio}}</td>
+                    <td>{{i.cantidad}}</td>
+                    <td>{{i.cantidad*i.precio}} Bs.</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>Total</td>
+                    <td>{{total}} Bs.</td>
+                </tr>
+            </table>
+<!--            <label v-for="i in ventas">{{i.nombre}} {{i.precio}}Bs</label>-->
         </div>
     </div>
 
@@ -111,7 +134,39 @@ export default {
     },
     methods:{
         mas(i){
-            this.ventas.push(i);
+
+            const index=this.ventas.findIndex(item=>item.id===i.id);
+            if (index==-1){
+                i.cantidad=1;
+                this.ventas.push(i);
+            }else{
+                this.ventas[index].cantidad=this.ventas[index].cantidad+1;
+                // console.log(this.ventas[index].cantidad+1);
+            }
+
+
+            // if(this.ventas.length==0){
+            //     i.cantidad=1;
+            //     this.ventas.push(i);
+            //     return false;
+            // }else{
+            //     let cont=0;
+            //     this.ventas.forEach(r=>{
+            //         // console.log(r.id==i.id);
+            //         if (r.id==i.id){
+            //             // this.ventas.splice(cont,1);
+            //             r.cantidad=r.cantidad+1;
+            //             this.ventas[cont]=r;
+            //             return false;
+            //         }
+            //         cont++;
+            //     })
+            //     i.cantidad=1;
+            //     this.ventas.push(i);
+            //     return false;
+            // }
+
+
             // this.dato={};
             // $('#crear').modal('show');
             // axios.post('/sale',{product_id:i.id,precio:i.precio}).then(res=>{
@@ -145,7 +200,7 @@ export default {
         },
         menos(i){
             // console.log(i)
-            let cont=0;
+            // let cont=0;
             // this.ventas.findIndex(item=>{
             //     cont++;
             //     console.log(item.id==i.id);
@@ -158,15 +213,28 @@ export default {
             //
             // });
             // console.log(index);
-            this.ventas.forEach(r=>{
+            // this.ventas.forEach(r=>{
+            //     // console.log(r.id==i.id);
+            //     if (r.id==i.id){
+            //         this.ventas.splice(cont,1);
+            //         return false;
+            //     }
+            //     cont++;
+            // })
 
-                console.log(r.id==i.id);
-                if (r.id==i.id){
-                    this.ventas.splice(cont,1);
+            const index=this.ventas.findIndex(item=>item.id===i.id);
+            if (index==-1){
+                // i.cantidad=1;
+                // this.ventas.push(i);
+            }else{
+                this.ventas[index].cantidad=this.ventas[index].cantidad-1;
+                if (this.ventas[index].cantidad==0){
+                    this.ventas.splice(index,1);
                     return false;
                 }
-                cont++;
-            })
+                // console.log(this.ventas[index].cantidad+1);
+            }
+
 
         },
         misdatos(){
@@ -196,7 +264,7 @@ export default {
                 // console.log(r.ventas);
                 // if (r.ventas.length==1){
                     // console.log(r.ventas[0].total);
-                    t+= parseInt(r.precio);
+                    t+= parseInt(r.precio)*parseInt(r.cantidad);
                 // }
                 // t+=
             })

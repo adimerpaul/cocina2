@@ -2869,6 +2869,29 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   mounted: function mounted() {
@@ -2885,7 +2908,36 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     mas: function mas(i) {
-      this.ventas.push(i); // this.dato={};
+      var index = this.ventas.findIndex(function (item) {
+        return item.id === i.id;
+      });
+
+      if (index == -1) {
+        i.cantidad = 1;
+        this.ventas.push(i);
+      } else {
+        this.ventas[index].cantidad = this.ventas[index].cantidad + 1; // console.log(this.ventas[index].cantidad+1);
+      } // if(this.ventas.length==0){
+      //     i.cantidad=1;
+      //     this.ventas.push(i);
+      //     return false;
+      // }else{
+      //     let cont=0;
+      //     this.ventas.forEach(r=>{
+      //         // console.log(r.id==i.id);
+      //         if (r.id==i.id){
+      //             // this.ventas.splice(cont,1);
+      //             r.cantidad=r.cantidad+1;
+      //             this.ventas[cont]=r;
+      //             return false;
+      //         }
+      //         cont++;
+      //     })
+      //     i.cantidad=1;
+      //     this.ventas.push(i);
+      //     return false;
+      // }
+      // this.dato={};
       // $('#crear').modal('show');
       // axios.post('/sale',{product_id:i.id,precio:i.precio}).then(res=>{
       //     // this.datos=res.data;
@@ -2898,6 +2950,7 @@ __webpack_require__.r(__webpack_exports__);
       //     });
       //     this.misdatos();
       // });
+
     },
     reset: function reset() {
       this.ventas = [];
@@ -2923,10 +2976,9 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     menos: function menos(i) {
-      var _this2 = this;
-
       // console.log(i)
-      var cont = 0; // this.ventas.findIndex(item=>{
+      // let cont=0;
+      // this.ventas.findIndex(item=>{
       //     cont++;
       //     console.log(item.id==i.id);
       //     if(item.id==i.id){
@@ -2938,24 +2990,35 @@ __webpack_require__.r(__webpack_exports__);
       //
       // });
       // console.log(index);
-
-      this.ventas.forEach(function (r) {
-        console.log(r.id == i.id);
-
-        if (r.id == i.id) {
-          _this2.ventas.splice(cont, 1);
-
-          return false;
-        }
-
-        cont++;
+      // this.ventas.forEach(r=>{
+      //     // console.log(r.id==i.id);
+      //     if (r.id==i.id){
+      //         this.ventas.splice(cont,1);
+      //         return false;
+      //     }
+      //     cont++;
+      // })
+      var index = this.ventas.findIndex(function (item) {
+        return item.id === i.id;
       });
+
+      if (index == -1) {// i.cantidad=1;
+        // this.ventas.push(i);
+      } else {
+        this.ventas[index].cantidad = this.ventas[index].cantidad - 1;
+
+        if (this.ventas[index].cantidad == 0) {
+          this.ventas.splice(index, 1);
+          return false;
+        } // console.log(this.ventas[index].cantidad+1);
+
+      }
     },
     misdatos: function misdatos() {
-      var _this3 = this;
+      var _this2 = this;
 
       axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/productSale').then(function (res) {
-        _this3.datos = res.data; // console.log(this.datos);
+        _this2.datos = res.data; // console.log(this.datos);
       });
     } // vendidos:async function (i){
     //     await axios.get('/sale/'+i.id).then(async res=>{
@@ -2976,7 +3039,7 @@ __webpack_require__.r(__webpack_exports__);
         // console.log(r.ventas);
         // if (r.ventas.length==1){
         // console.log(r.ventas[0].total);
-        t += parseInt(r.precio); // }
+        t += parseInt(r.precio) * parseInt(r.cantidad); // }
         // t+=
       });
       return t;
@@ -30687,7 +30750,7 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "row" }, [
-    _c("div", { staticClass: "col-md-10" }, [
+    _c("div", { staticClass: "col-md-9" }, [
       _c(
         "div",
         { staticClass: "row" },
@@ -30732,8 +30795,7 @@ var render = function() {
                           staticClass: "product-imitation",
                           staticStyle: {
                             "background-size": "100% 100%",
-                            "background-repeat": "no-repeat",
-                            padding: "35px"
+                            "background-repeat": "no-repeat"
                           },
                           style: { backgroundImage: "url(" + i.photo + ")" }
                         },
@@ -30891,20 +30953,44 @@ var render = function() {
       )
     ]),
     _vm._v(" "),
-    _c(
-      "div",
-      { staticClass: "col-md-2" },
-      [
-        _c("h3", [_vm._v("Productos")]),
-        _vm._v(" "),
-        _vm._l(_vm.ventas, function(i) {
-          return _c("label", [
-            _vm._v(_vm._s(i.nombre) + " " + _vm._s(i.precio) + "Bs")
+    _c("div", { staticClass: "col-md-3" }, [
+      _c("h3", [_vm._v("Productos")]),
+      _vm._v(" "),
+      _c(
+        "table",
+        { staticClass: "table" },
+        [
+          _vm._m(1),
+          _vm._v(" "),
+          _vm._l(_vm.ventas, function(i, index) {
+            return _c("tr", { key: index }, [
+              _c("td", [_vm._v(_vm._s(index + 1))]),
+              _vm._v(" "),
+              _c("td", [_vm._v(_vm._s(i.nombre))]),
+              _vm._v(" "),
+              _c("td", [_vm._v(_vm._s(i.precio))]),
+              _vm._v(" "),
+              _c("td", [_vm._v(_vm._s(i.cantidad))]),
+              _vm._v(" "),
+              _c("td", [_vm._v(_vm._s(i.cantidad * i.precio) + " Bs.")])
+            ])
+          }),
+          _vm._v(" "),
+          _c("tr", [
+            _c("td"),
+            _vm._v(" "),
+            _c("td"),
+            _vm._v(" "),
+            _c("td"),
+            _vm._v(" "),
+            _c("td", [_vm._v("Total")]),
+            _vm._v(" "),
+            _c("td", [_vm._v(_vm._s(_vm.total) + " Bs.")])
           ])
-        })
-      ],
-      2
-    )
+        ],
+        2
+      )
+    ])
   ])
 }
 var staticRenderFns = [
@@ -30914,6 +31000,22 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "col-md-12" }, [
       _c("h4", [_vm._v("BEBIDAS")])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("tr", [
+      _c("th", [_vm._v("#")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Nombre")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Precio")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Cantidad")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Subtotal")])
     ])
   }
 ]

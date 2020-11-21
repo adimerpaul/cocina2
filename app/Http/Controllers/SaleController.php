@@ -22,15 +22,18 @@ class SaleController extends Controller
     {
 //        return $request->ventas;
         foreach ($request->ventas as $venta){
-            $d=new Sale();
-            $d->precio=$venta['precio'];
-            $d->product_id=$venta['id'];
-            $d->user_id=Auth::user()->id;
-            $d->save();
 
-            $p=Product::find($venta['id']);
-            $p->cantidad=$p->cantidad-1;
-            $p->save();
+            for ($i=0;$i<$venta['cantidad'];$i++){
+                $d=new Sale();
+                $d->precio=$venta['precio'];
+                $d->product_id=$venta['id'];
+                $d->user_id=Auth::user()->id;
+                $d->save();
+                $p=Product::find($venta['id']);
+                $p->cantidad=$p->cantidad-1;
+                $p->save();
+            }
+
         }
     }
 
