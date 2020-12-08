@@ -89,15 +89,30 @@
                         </li>
                     </router-link>
                     <router-link
+                        to="/reserva"
+                        v-slot="{ href, route, navigate, isActive, isExactActive }"
+                    >
+                        <li class="treeview" :class="[isActive && 'active', isExactActive && '']">
+                            <a :href="href" @click="navigate">
+                                <i class="fa fa-desktop"></i> <span class="nav-label"> Reservas</span>
+                            </a>
+                        </li>
+                    </router-link>
+                    <router-link
                         to="/reporte"
                         v-slot="{ href, route, navigate, isActive, isExactActive }"
                     >
                         <li class="treeview" :class="[isActive && 'active', isExactActive && '']">
                             <a :href="href" @click="navigate">
-                                <i class="fa fa-desktop"></i> <span class="nav-label"> Reportes</span>
+                                <i class="fa fa-bar-chart-o"></i> <span class="nav-label"> Reportes</span>
                             </a>
                         </li>
                     </router-link>
+                    <li class="treeview" >
+                        <a href="" @click.prevent="vaciar">
+                            <i class="fa fa-bank"></i> <span class="nav-label"> vaciar base de datos</span>
+                        </a>
+                    </li>
 {{--                    <li class="active">--}}
 {{--                        <a href="index.html"><i class="fa fa-th-large"></i>--}}
 {{--                            <span class="nav-label">Dashboards</span>--}}

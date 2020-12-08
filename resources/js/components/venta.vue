@@ -1,17 +1,19 @@
 <template>
     <div class="row">
-        <div class="col-md-9">
+        <div class="col-md-8">
             <div class="row">
                 <div class="col-md-12">
                     <h3>
                         Total: {{total}} Bs.
-                        <button @click="reset" class="btn btn-primary btn-sm"><i class="fa fa-refresh"></i></button>
-                        <button @click="guardar" class="btn btn-success btn-sm"><i class="fa fa-save"></i></button>
+                        <button @click="reset" class="btn btn-primary btn-sm"><i class="fa fa-refresh"></i> Reset</button>
+                        <button @click="guardar" class="btn btn-success btn-sm"><i class="fa fa-save"></i> Vender</button>
+                        <input type="text" placeholder="Familia" v-model="familia">
+                        <button @click="reservar" class="btn btn-info btn-sm"><i class="fa fa-cog"></i> Reservar</button>
                     </h3>
                     <!--            <pre>{{ventas}}</pre>-->
-                    <h4>COMIDAS</h4>
+<!--                    <h4>COMIDAS</h4>-->
                 </div>
-                <div v-for="i in datos" class="col-md-2" v-if="i.tipo=='COMIDA'">
+                <div v-for="i in datos" class="col-md-3" style="padding: 0;margin: 0;border: 0">
                     <div class="ibox">
                         <div class="ibox-content product-box">
                             <div class="product-imitation" style="
@@ -46,47 +48,47 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-12">
-                    <h4>BEBIDAS</h4>
-                </div>
-                <div v-for="i in datos" class="col-md-2" v-if="i.tipo=='BEBIDA'">
-                    <div class="ibox">
-                        <div class="ibox-content product-box">
-                            <div class="product-imitation" style="
-                    background-size: 100% 100%;
-                    background-repeat: no-repeat;
-                    padding: 35px"
-                                 v-bind:style="{ backgroundImage: 'url(' + i.photo + ')' }"
-                            >
-                                <div style="color: white;background: rgba(0,0,0,0.5)">{{i.nombre}}</div>
-                            </div>
-                            <div class="product-desc">
-                                <span class="product-price">
-                                    Bs {{i.precio}}
-                                </span>
-                                <!--                        <div class="text-muted">Disponib: <b>{{i.cantidad}}</b></div>-->
-                                <!--                        <div class="text-muted">Vendidos: <b>{{i.sale.length}}</b></div>-->
-                                <!--                        <div class="text-muted">En Bolivi.: <b><label v-for="i in i.ventas">{{i.total}}</label></b></div>-->
-                                <!--                                                <div class="text-muted">Bs. {{i.ventas[0]}}</div>-->
-                                <!--                                                <a href="#" class="product-name"> Product</a>-->
-                                <div class="small m-t-xs" style="padding: 0px;margin:0px;border: 0px">
-                                    <!--                                    <div class="text-muted">Disponib: <b>{{i.cantidad}}</b></div>-->
-                                    <!--                                    <div class="text-muted">Vendidos: <b>{{i.sale.length}}</b></div>-->
-                                    <!--                                    <div class="text-muted">En Bolivi.: <b><label v-for="i in i.ventas">{{i.total}}</label></b></div>-->
-                                </div>
-                                <div class="text-center">
-                                    <!--                            <a href="#" class="btn btn-xs btn-outline btn-primary">Info <i class="fa fa-long-arrow-right"></i> </a>-->
-                                    <!--                            <button @click="vender(i)" class="btn btn-primary btn-block"> <i class="fa fa-money"></i> Agregar</button>-->
-                                    <button @click="mas(i)" class="btn btn-success "> <i class="fa fa-plus-circle"></i> </button>
-                                    <button @click="menos(i)" class="btn btn-danger "> <i class="fa fa-minus-circle"></i> </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+<!--                <div class="col-md-12">-->
+<!--                    <h4>BEBIDAS</h4>-->
+<!--                </div>-->
+<!--                <div v-for="i in datos" class="col-md-3" v-if="i.tipo=='BEBIDA'">-->
+<!--                    <div class="ibox">-->
+<!--                        <div class="ibox-content product-box">-->
+<!--                            <div class="product-imitation" style="-->
+<!--                    background-size: 100% 100%;-->
+<!--                    background-repeat: no-repeat;-->
+<!--                    "-->
+<!--                                 v-bind:style="{ backgroundImage: 'url(' + i.photo + ')' }"-->
+<!--                            >-->
+<!--                                <div style="color: white;background: rgba(0,0,0,0.5)">{{i.nombre}}</div>-->
+<!--                            </div>-->
+<!--                            <div class="product-desc">-->
+<!--                                <span class="product-price">-->
+<!--                                    Bs {{i.precio}}-->
+<!--                                </span>-->
+<!--                                &lt;!&ndash;                        <div class="text-muted">Disponib: <b>{{i.cantidad}}</b></div>&ndash;&gt;-->
+<!--                                &lt;!&ndash;                        <div class="text-muted">Vendidos: <b>{{i.sale.length}}</b></div>&ndash;&gt;-->
+<!--                                &lt;!&ndash;                        <div class="text-muted">En Bolivi.: <b><label v-for="i in i.ventas">{{i.total}}</label></b></div>&ndash;&gt;-->
+<!--                                &lt;!&ndash;                                                <div class="text-muted">Bs. {{i.ventas[0]}}</div>&ndash;&gt;-->
+<!--                                &lt;!&ndash;                                                <a href="#" class="product-name"> Product</a>&ndash;&gt;-->
+<!--                                <div class="small m-t-xs" style="padding: 0px;margin:0px;border: 0px">-->
+<!--                                    &lt;!&ndash;                                    <div class="text-muted">Disponib: <b>{{i.cantidad}}</b></div>&ndash;&gt;-->
+<!--                                    &lt;!&ndash;                                    <div class="text-muted">Vendidos: <b>{{i.sale.length}}</b></div>&ndash;&gt;-->
+<!--                                    &lt;!&ndash;                                    <div class="text-muted">En Bolivi.: <b><label v-for="i in i.ventas">{{i.total}}</label></b></div>&ndash;&gt;-->
+<!--                                </div>-->
+<!--                                <div class="text-center">-->
+<!--                                    &lt;!&ndash;                            <a href="#" class="btn btn-xs btn-outline btn-primary">Info <i class="fa fa-long-arrow-right"></i> </a>&ndash;&gt;-->
+<!--                                    &lt;!&ndash;                            <button @click="vender(i)" class="btn btn-primary btn-block"> <i class="fa fa-money"></i> Agregar</button>&ndash;&gt;-->
+<!--                                    <button @click="mas(i)" class="btn btn-success "> <i class="fa fa-plus-circle"></i> </button>-->
+<!--                                    <button @click="menos(i)" class="btn btn-danger "> <i class="fa fa-minus-circle"></i> </button>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
             </div>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-4">
             <h3>Productos</h3>
             <table class="table">
                 <tr>
@@ -129,7 +131,8 @@ export default {
             datos:[],
             dato:{},
             // products:[],
-            ventas:[]
+            ventas:[],
+            familia:'',
         }
     },
     methods:{
@@ -184,7 +187,54 @@ export default {
         reset(){
             this.ventas=[];
         },
+        reservar(){
+            if(this.familia==''){
+                this.$fire({
+                    title: "Seleciona familia",
+                    // text: "text",
+                    type: "error",
+                    timer: 3000
+                }).then(r => {
+                    console.log(r.value);
+                });
+                return false;
+            }
+            if(this.ventas.length==0){
+                this.$fire({
+                    title: "Seleciona productos",
+                    // text: "text",
+                    type: "error",
+                    timer: 3000
+                }).then(r => {
+                    console.log(r.value);
+                });
+                return false;
+            }
+            axios.post('/sales',{ventas:this.ventas,tipo:'RESERVA',familia:this.familia}).then(res=>{
+                // this.datos=res.data;
+                console.log(res.data);
+                this.$toast.open({
+                    message: "Agregado correctamente",
+                    type: "success",
+                    duration: 3000,
+                    dismissible: true
+                });
+                // this.misdatos();
+                this.ventas=[];
+            });
+        },
         guardar(){
+            if(this.ventas.length==0){
+                this.$fire({
+                    title: "Seleciona productos",
+                    // text: "text",
+                    type: "error",
+                    timer: 3000
+                }).then(r => {
+                    console.log(r.value);
+                });
+                return false;
+            }
             axios.post('/sales',{ventas:this.ventas}).then(res=>{
                 // this.datos=res.data;
                 console.log(res.data);

@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Models\Sale;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class SaleController extends Controller
 {
@@ -18,19 +19,52 @@ class SaleController extends Controller
     {
         return Sale::all();
     }
+    public  function historial(){
+        return DB::table('sales')
+            ->select(DB::raw('DATE(created_at) as date'), DB::raw('sum(precio) as total'))
+            ->groupBy('date')
+            ->orderBy('date','desc')
+            ->get();
+    }
+    public function cancelar(Request $request)
+    {
+//        return Sale::all();
+        $sales=Sale::where('numpedido',$request->numpedido)->get();
+        foreach ($sales as $sale){
+            $p=Product::find($sale->product_id);
+            $p->cantidad=$p->cantidad+1;
+            $p->save();
+        }
+        DB::table('sales')->where('numpedido', $request->numpedido)->delete();
+    }
+    public function entregar(Request $request)
+    {
+//        return Sale::all();
+        DB::table('sales')
+            ->where('numpedido', $request->numpedido)
+            ->update(['tipo' => 'VENTA']);
+    }
     public function sales(Request $request)
     {
 //        return $request->ventas;
-        foreach ($request->ventas as $venta){
+        $numopedido = Sale::max('numpedido')+1;
 
+        foreach ($request->ventas as $venta){
             for ($i=0;$i<$venta['cantidad'];$i++){
                 $d=new Sale();
                 $d->precio=$venta['precio'];
                 $d->product_id=$venta['id'];
+                $d->numpedido=$numopedido;
                 $d->user_id=Auth::user()->id;
+                if ($request->tipo=='RESERVA'){
+                    $d->tipo='RESERVA';
+                    $d->familia=$request->familia;
+                }
                 $d->save();
                 $p=Product::find($venta['id']);
                 $p->cantidad=$p->cantidad-1;
+
+//                echo $request->tipo;
                 $p->save();
             }
 
@@ -55,6 +89,7 @@ class SaleController extends Controller
      */
     public function store(Request $request)
     {
+//        if (isset($request->))
         $d=new Sale();
         $d->precio=$request->precio;
         $d->product_id=$request->product_id;
@@ -109,9 +144,9 @@ class SaleController extends Controller
      * @param  \App\Models\Sale  $sale
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Sale $sale)
+    public function destroy($id)
     {
-        //
+        Sale::truncate();
     }
     public function consulta($d1,$d2)
     {
@@ -128,7 +163,7 @@ class SaleController extends Controller
                 with('user')
                 ->with('product')
 //                ->with('user')
-//                ->where('recinto','=',Auth::user()->tipo)
+                ->where('tipo','VENTA')
                 ->whereDate('created_at','>=',$d1)
                 ->whereDate('created_at','<=',$d2)
                 ->get();

@@ -26,8 +26,10 @@ import products from './components/products';
 import sales from './components/sales';
 import reporte from './components/reporte';
 import venta from './components/venta';
+import reserva from './components/reserva';
 const routes = [
     { path: '/home', component: home },
+    { path: '/reserva', component: reserva },
     { path: '/products', component: products },
     { path: '/sales', component: sales },
     { path: '/venta', component: venta },
@@ -38,6 +40,35 @@ const router = new VueRouter({
     routes // short for `routes: routes`
 })
 
+import axios from 'axios';
 const app = new Vue({
-    router
+    router,
+    methods:{
+        vaciar(){
+            // console.log('aa');
+            this.$fire({
+                title: "Seguro?",
+                text: "Eliminar toda la base de datos?",
+                type: "warning",
+                timer: 3000,
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'SI'
+            }).then(r => {
+                // console.log(r.value);
+                if(r.value){
+                    axios.delete('/sales/1').then(res=>{
+                        this.$fire({
+                            title: "Eliminado",
+                            text: "correctamente",
+                            type: "success",
+                            timer: 3000
+                        })
+                    })
+                }
+            });
+
+        }
+    }
 }).$mount('#app')

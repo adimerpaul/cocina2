@@ -112,6 +112,55 @@
                                                 </select>
                                             </div>
                                         </div>
+<!--                                        <div class="form-group row">-->
+<!--                                            <label class="col-lg-2 col-form-label">Fotografia</label>-->
+<!--                                            <div class="col-lg-10">-->
+<!--                                                <input type="file" id="imgUpdate" name="image" @change="getImage" accept="image/*" >-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-danger" data-dismiss="modal"> <i class="fa fa-trash"></i> Cancelar</button>
+                                            <button type="submit" class="btn btn-warning"><i class="fa fa-save"></i> Modificar</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal inmodal fade" id="foto" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+                                    <h4 class="modal-title">Modificar </h4>
+                                    <!--                                    <small class="font-bold">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</small>-->
+                                </div>
+                                <div class="modal-body">
+                                    <form @submit.prevent="updatefoto">
+<!--                                        <div class="form-group row">-->
+<!--                                            <label class="col-lg-1 col-form-label">Nombre</label>-->
+<!--                                            <div class="col-lg-5">-->
+<!--                                                <input type="text" name="nombre" placeholder="Nombre plato" v-model="dato.nombre" class="form-control">-->
+<!--                                            </div>-->
+<!--                                            <label class="col-lg-1 col-form-label">Precio</label>-->
+<!--                                            <div class="col-lg-5">-->
+<!--                                                <input type="number" step="0.01" name="precio" placeholder="Precio" v-model="dato.precio" class="form-control">-->
+<!--                                            </div>-->
+<!--                                        </div>-->
+<!--                                        <div class="form-group row">-->
+<!--                                            <label class="col-lg-1 col-form-label">Cantidad</label>-->
+<!--                                            <div class="col-lg-5">-->
+<!--                                                <input type="number" step="0.01"  name="cantidad" placeholder="Cantidad" v-model="dato.cantidad" class="form-control">-->
+<!--                                            </div>-->
+<!--                                            <label class="col-lg-1 col-form-label">Tipo</label>-->
+<!--                                            <div class="col-lg-5">-->
+<!--                                                <select name="" id="" class="form-control" v-model="dato.tipo">-->
+<!--                                                    <option value="">Seleccionar...</option>-->
+<!--                                                    <option value="COMIDA">COMIDA</option>-->
+<!--                                                    <option value="BEBIDA">BEBIDA</option>-->
+<!--                                                </select>-->
+<!--                                            </div>-->
+<!--                                        </div>-->
                                         <div class="form-group row">
                                             <label class="col-lg-2 col-form-label">Fotografia</label>
                                             <div class="col-lg-10">
@@ -157,6 +206,7 @@
                             </td>
                             <td>
                                 <button @click="modificar(i)" class="btn btn-warning btn-xs"><i class="fa fa-pencil"></i></button>
+                                <button @click="foto(i)" class="btn btn-success btn-xs"> <i class="fa fa-camera"></i> </button>
                                 <button @click="mostrar(i)" class="btn btn-info btn-xs"><i class="fa fa-eye"></i></button>
                                 <button @click="eliminar(i)" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></button>
                             </td>
@@ -262,6 +312,30 @@ export default {
                 this.dato={};
             })
         },
+        updatefoto(){
+            let data=new FormData();
+            // data.append('nombre',this.dato.nombre);
+            // data.append('cantidad',this.dato.cantidad);
+            // data.append('precio',this.dato.precio);
+            // data.append('tipo',this.dato.tipo);
+            data.append('image',this.imagen);
+            // data.append('_method', 'PUT');
+            axios.post('/updateFoto/'+this.dato.id,data).then(res=>{
+                // console.log('asaa');
+                console.log(res.data);
+                // return false;
+                $('#imgUpdate').val('');
+                this.misdatos();
+                $('#foto').modal('hide');
+                this.$toast.open({
+                    message: "Dato modificado",
+                    type: "warning",
+                    duration: 3000,
+                    dismissible: true
+                });
+                this.dato={};
+            })
+        },
         actualizar(){
             this.misdatos();
             this.$toast.open({
@@ -273,6 +347,10 @@ export default {
         },
         modificar(i){
             $('#modificar').modal('show');
+            this.dato=i;
+        },
+        foto(i){
+            $('#foto').modal('show');
             this.dato=i;
         },
         eliminar(i){

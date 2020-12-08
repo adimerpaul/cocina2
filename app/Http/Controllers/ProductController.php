@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\Sale;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
@@ -12,6 +15,70 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function reservas(){
+//        $users = Sale::orderBy('numpedido', 'desc')
+//            ->groupBy('numpedido')
+////            ->having('count', '>', 100)
+//            ->get();
+//        $orders = DB::table('sales')
+//            ->select('numpedido','count(*)')
+//            ->groupBy('numpedido')
+//            ->get();
+//        $pro=Product::all();
+//        $orders = DB::table('sales')
+//            ->select(DB::raw('count(*) cantidad,numpedido,familia'))
+//            ->where('tipo', 'RESERVA')
+//            ->groupBy('numpedido','familia')
+////            ->with('product',$pro)
+//            ->with(['products' => function($query) {
+////                $query->select('products.*')
+////                ->table('products');
+//                $query->where('nombre', 'like', '%PI%');
+////                    ->leftJoin('enhancements', function($join) {
+////                        $join->on('enhancements.business_id', '=', 'businesses.id')
+////                            ->join('products', 'products.id', 'enhancements.product_id');
+////                    })
+////                    ->orderByRaw('FIELD(products.slug, ?, ?) DESC', ['enhanced-listing', 'premium-listing'])
+////                    ->orderByRaw('CASE WHEN products.slug IS NOT NULL THEN RAND() ELSE businesses.name END');
+//            }])
+//            ->get();
+//        return $orders;
+//        $users = User::with(['sales' => function($query)
+//        {
+////            $query->where('tipo', 'like', '%VE%');
+//
+//        }])->get();
+//        $users=User::all();
+//        $users = User::with('sales')->get();
+
+//        $users = User::with(['sales' => function($query)
+//        {
+//            $query->orderBy('created_at', 'desc');
+//
+//        }])->get();
+//                $orders = DB::table('sales')
+//            ->select(DB::raw('count(*) cantidad,numpedido,familia'))
+//            ->where('tipo', 'RESERVA')
+//            ->groupBy('numpedido','familia')
+////            ->with('product',$pro)
+////            ->with(['products' => function($query) {
+//////                $query->select('products.*')
+//////                ->table('products');
+////                $query->where('nombre', 'like', '%PI%');
+////                    ->leftJoin('enhancements', function($join) {
+////                        $join->on('enhancements.business_id', '=', 'businesses.id')
+////                            ->join('products', 'products.id', 'enhancements.product_id');
+////                    })
+////                    ->orderByRaw('FIELD(products.slug, ?, ?) DESC', ['enhanced-listing', 'premium-listing'])
+////                    ->orderByRaw('CASE WHEN products.slug IS NOT NULL THEN RAND() ELSE businesses.name END');
+////            }])
+//            ->get();
+        $orders=Sale::with('product')->where('tipo','RESERVA')->get();
+        return $orders;
+//        return User::all()->toArray();
+    }
+
+
     public function index()
     {
         return Product::all();
@@ -95,6 +162,18 @@ class ProductController extends Controller
         $d->precio=$request->precio;
         $d->photo=$path;
         $d->tipo=$request->tipo;
+        $d->save();
+//        $_POST['image'];
+    }
+    public function updateFoto(Request $request, $id)
+    {
+        $request->hasFile('image')?$path=$request->file('image')->store('image'):$path="";
+        $d=Product::find($id);
+//        $d->nombre=$request->nombre;
+//        $d->cantidad=$request->cantidad;
+//        $d->precio=$request->precio;
+        $d->photo=$path;
+//        $d->tipo=$request->tipo;
         $d->save();
 //        $_POST['image'];
     }
