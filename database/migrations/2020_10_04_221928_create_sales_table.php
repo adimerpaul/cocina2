@@ -17,7 +17,7 @@ class CreateSalesTable extends Migration
             $table->id();
             $table->double('precio',11,2);
             $table->string('tipo')->nullable()->default('VENTA');
-            $table->integer('numpedido');
+            $table->integer('numpedido')->default(1);
             $table->string('familia')->nullable();
             $table->string('celular')->nullable();
             $table->string('dir')->nullable();
