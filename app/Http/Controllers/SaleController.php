@@ -59,6 +59,10 @@ class SaleController extends Controller
                 if ($request->tipo=='RESERVA'){
                     $d->tipo='RESERVA';
                     $d->familia=$request->familia;
+                    $d->celular=$request->celular;
+                    $d->dir=$request->dir;
+                    $d->obs=$request->obs;
+                    $d->hora=$request->hora;
                 }
                 $d->save();
                 $p=Product::find($venta['id']);

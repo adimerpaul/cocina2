@@ -41,7 +41,7 @@
                                 <tr v-for="(i,index) in datos" :key="index" class="gradeA odd" role="row">
                                     <td class="sorting_1">{{index+1}}</td>
                                     <td>Numero {{i.numpedido}}</td>
-                                    <td>{{i.familia}}</td>
+                                    <td>{{i.familia}} {{i.celular}} {{i.dir}} {{i.obs}} {{i.hora}}</td>
                                     <td>{{i.total}}</td>
                                     <td>
                                         <div v-for="p in i.products">{{p.nombre}}</div>
@@ -100,7 +100,15 @@ export default {
                 res.data.forEach(r=>{
                     let index=this.datos.findIndex(item=>item.numpedido===r.numpedido)
                     if (index==-1){
-                        this.datos.push({total:r.precio,numpedido:r.numpedido,familia:r.familia,products:[r.product]});
+                        this.datos.push({
+                            total:r.precio,
+                            numpedido:r.numpedido,
+                            familia:r.familia,
+                            celular:r.celular,
+                            dir:r.dir,
+                            obs:r.obs,
+                            hora:r.hora,
+                            products:[r.product]});
                         // this.datos[index].products=;
                     }else{
                         this.datos[index].total=this.datos[index].total+r.precio;

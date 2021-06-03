@@ -7,8 +7,27 @@
                         Total: {{total}} Bs.
                         <button @click="reset" class="btn btn-primary btn-sm"><i class="fa fa-refresh"></i> Reset</button>
                         <button @click="guardar" class="btn btn-success btn-sm"><i class="fa fa-save"></i> Vender</button>
-                        <input type="text" placeholder="Familia" v-model="familia">
-                        <button @click="reservar" class="btn btn-info btn-sm"><i class="fa fa-cog"></i> Reservar</button>
+                        <div class="row">
+                            <div class="col-2">
+                                <input type="text" placeholder="Familia" v-model="familia">
+                            </div>
+                            <div class="col-2">
+                                <input type="text" placeholder="Celular" v-model="celular">
+                            </div>
+                            <div class="col-2">
+                                <input type="text" placeholder="Direccion" v-model="dir">
+                            </div>
+                            <div class="col-2">
+                                <input type="text" placeholder="Observacion" v-model="obs">
+                            </div>
+                            <div class="col-2">
+                                <input type="text" placeholder="Hora" v-model="hora">
+                            </div>
+                            <div class="col-2">
+                                <button @click="reservar" class="btn btn-info btn-sm"><i class="fa fa-cog"></i> Reservar</button>
+                            </div>
+                        </div>
+
                     </h3>
                     <!--            <pre>{{ventas}}</pre>-->
 <!--                    <h4>COMIDAS</h4>-->
@@ -133,6 +152,10 @@ export default {
             // products:[],
             ventas:[],
             familia:'',
+            dir:'',
+            obs:'',
+            hora:'',
+            celular:'',
         }
     },
     methods:{
@@ -210,7 +233,15 @@ export default {
                 });
                 return false;
             }
-            axios.post('/sales',{ventas:this.ventas,tipo:'RESERVA',familia:this.familia}).then(res=>{
+            axios.post('/sales',{
+                ventas:this.ventas,
+                tipo:'RESERVA',
+                familia:this.familia,
+                dir:this.dir,
+                obs:this.obs,
+                hora:this.hora,
+                celular:this.celular,
+            }).then(res=>{
                 // this.datos=res.data;
                 console.log(res.data);
                 this.$toast.open({

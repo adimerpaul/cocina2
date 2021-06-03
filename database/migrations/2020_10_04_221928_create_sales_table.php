@@ -17,6 +17,12 @@ class CreateSalesTable extends Migration
             $table->id();
             $table->double('precio',11,2);
             $table->string('tipo')->nullable()->default('VENTA');
+            $table->integer('numpedido');
+            $table->string('familia')->nullable();
+            $table->string('celular')->nullable();
+            $table->string('dir')->nullable();
+            $table->string('obs')->nullable();
+            $table->string('hora')->nullable();
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
             $table->unsignedBigInteger('product_id');
