@@ -73,9 +73,10 @@ class ProductController extends Controller
 ////                    ->orderByRaw('CASE WHEN products.slug IS NOT NULL THEN RAND() ELSE businesses.name END');
 ////            }])
 //            ->get();
-        $orders=Sale::with('product')->where('tipo','RESERVA')->get();
-        return $orders;
+//        $orders=Sale::with('product')->where('tipo','RESERVA')->get();
+//        return $orders;
 //        return User::all()->toArray();
+        return Sale::with('details')->with('delivery')->get();
     }
 
 
@@ -132,7 +133,7 @@ class ProductController extends Controller
 
     public function productSale()
     {
-        return Product::where('estado','=','VISIBLE')->with('sale')->with('ventas')->get();
+        return Product::where('estado','=','VISIBLE')->get();
     }
 
     /**

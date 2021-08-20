@@ -10,6 +10,10 @@ Vue.use(VueSimpleAlert);
 
 Vue.use(require('vue-moment'));
 
+import VueApexCharts from 'vue-apexcharts'
+Vue.use(VueApexCharts)
+
+Vue.component('apexchart', VueApexCharts)
 
 import VueToast from 'vue-toast-notification';
 // Import one of available themes

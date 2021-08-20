@@ -6,27 +6,102 @@
                     <h3>
                         Total: {{total}} Bs.
                         <button @click="reset" class="btn btn-primary btn-sm"><i class="fa fa-refresh"></i> Reset</button>
-                        <button @click="guardar" class="btn btn-success btn-sm"><i class="fa fa-save"></i> Vender</button>
-                        <div class="row">
-                            <div class="col-2">
-                                <input type="text" placeholder="Familia" v-model="familia">
+<!--                        <button @click="guardar" class="btn btn-success btn-sm"><i class="fa fa-save"></i> Vender</button>-->
+                        <form @submit.prevent="reservar">
+                            <div class="form-group row">
+                                <label for="familia" class="col-sm-1 col-form-label">Familia</label>
+                                <div class="col-sm-5">
+                                    <input type="text" class="form-control" id="familia" placeholder="Familia" v-model="familia">
+                                </div>
+                                <label for="celular" class="col-sm-1 col-form-label">Celular</label>
+                                <div class="col-sm-5">
+                                    <input type="text" class="form-control" id="celular" placeholder="Celular" v-model="celular">
+                                </div>
+                                <label for="dir" class="col-sm-1 col-form-label">Direc.</label>
+                                <div class="col-sm-5">
+                                    <input type="text" class="form-control" id="dir" placeholder="Direc." v-model="dir">
+                                </div>
+                                <label for="obs" class="col-sm-1 col-form-label">Obser.</label>
+                                <div class="col-sm-5">
+                                    <input type="text" class="form-control" id="obs" placeholder="Obser." v-model="obs">
+                                </div>
+                                <label for="hora" class="col-sm-1 col-form-label">Hora.</label>
+                                <div class="col-sm-5">
+                                    <input type="time" class="form-control" id="hora"  placeholder="Obser." v-model="hora">
+                                </div>
+
+                                <label for="tipo1" class="col-sm-1 col-form-label">Tipo</label>
+                                <div class="col-sm-4">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="exampleRadios" id="tipo1" value="RESTAURANT" v-model="tipo">
+                                        <label class="form-check-label" for="tipo1">
+                                            RESTAURANT
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="tipo" id="tipo2" value="ENVIAR" v-model="tipo">
+                                        <label class="form-check-label" for="tipo2">
+                                            ENVIAR
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="tipo" id="tipo3" value="RECOGER" v-model="tipo" >
+                                        <label class="form-check-label" for="tipo3">
+                                            RECOGER
+                                        </label>
+                                    </div>
+                                </div>
+                                <label for="delivery" class="col-sm-2 col-form-label">Delivery</label>
+                                <div class="col-sm-5">
+                                    <select name="de" id="delivery" v-model="delivery" class="form-control">
+                                        <option v-for="(delivery,index) in deliveries" :key="index" :value="delivery.id">{{delivery.nombre}}</option>
+                                    </select>
+                                </div>
+                                <div class="col-sm-12">
+                                    <button type="submit" class=" btn-block btn btn-primary btn-sm"><i class="fa fa-cog"></i> Reservar</button>
+                                </div>
                             </div>
-                            <div class="col-2">
-                                <input type="text" placeholder="Celular" v-model="celular">
-                            </div>
-                            <div class="col-2">
-                                <input type="text" placeholder="Direccion" v-model="dir">
-                            </div>
-                            <div class="col-2">
-                                <input type="text" placeholder="Observacion" v-model="obs">
-                            </div>
-                            <div class="col-2">
-                                <input type="text" placeholder="Hora" v-model="hora">
-                            </div>
-                            <div class="col-2">
-                                <button @click="reservar" class="btn btn-info btn-sm"><i class="fa fa-cog"></i> Reservar</button>
-                            </div>
-                        </div>
+                        </form>
+<!--                        <form>-->
+<!--                            <div class="form-row">-->
+<!--                                <div class="form-group col-md-3">-->
+<!--                                    <label for="familia">Familia</label>-->
+<!--                                    <input type="text" placeholder="Familia" v-model="familia" id="familia" class="form-control">-->
+<!--                                </div>-->
+<!--                                <div class="form-group col-md-3">-->
+<!--                                    <label for="celular">Celular</label>-->
+<!--                                    <input type="text" placeholder="Celular" v-model="celular" id="celular" class="form-control">-->
+<!--                                </div>-->
+<!--                                <div class="form-group col-md-3">-->
+<!--                                    <label for="dir">Direccion</label>-->
+<!--                                    <input type="text" placeholder="Familia" v-model="dir" id="dir" class="form-control">-->
+<!--                                </div>-->
+<!--                                <div class="form-group col-md-3">-->
+<!--                                    <label for="obs">Observacion</label>-->
+<!--                                    <input type="text" placeholder="Observacion" v-model="obs" id="obs" class="form-control">-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </form>-->
+<!--                        <div class="row">-->
+<!--                            <div class="col-2">-->
+<!--                                <input type="text" placeholder="Familia" v-model="familia">-->
+<!--                            </div>-->
+<!--                            <div class="col-2">-->
+<!--                                <input type="text" placeholder="Celular" v-model="celular">-->
+<!--                            </div>-->
+<!--                            <div class="col-2">-->
+<!--                                <input type="text" placeholder="Direccion" v-model="dir">-->
+<!--                            </div>-->
+<!--                            <div class="col-2">-->
+<!--                                <input type="text" placeholder="Observacion" v-model="obs">-->
+<!--                            </div>-->
+<!--                            <div class="col-2">-->
+<!--                                <input type="text" placeholder="Hora" v-model="hora">-->
+<!--                            </div>-->
+<!--                            <div class="col-2">-->
+<!--                                <button @click="reservar" class="btn btn-info btn-sm"><i class="fa fa-cog"></i> Reservar</button>-->
+<!--                            </div>-->
+<!--                        </div>-->
 
                     </h3>
                     <!--            <pre>{{ventas}}</pre>-->
@@ -122,7 +197,7 @@
                     <td>{{i.nombre}}</td>
                     <td>{{i.precio}}</td>
                     <td>{{i.cantidad}}</td>
-                    <td>{{i.cantidad*i.precio}} Bs.</td>
+                    <td>{{i.subtotal}} Bs.</td>
                 </tr>
                 <tr>
                     <td></td>
@@ -132,6 +207,7 @@
                     <td>{{total}} Bs.</td>
                 </tr>
             </table>
+<!--            {{ventas}}-->
 <!--            <label v-for="i in ventas">{{i.nombre}} {{i.precio}}Bs</label>-->
         </div>
     </div>
@@ -143,6 +219,11 @@ import axios from 'axios';
 export default {
     mounted() {
         this.misdatos();
+        axios.get('/delivery').then(res=>{
+            // console.log(res.data)
+            this.deliveries=res.data
+            this.delivery=this.deliveries[0].id
+        })
     },
     data:function (){
         return {
@@ -154,19 +235,23 @@ export default {
             familia:'',
             dir:'',
             obs:'',
-            hora:'',
+            hora:'12:00',
             celular:'',
+            tipo:'RESTAURANT',
+            deliveries:[],
+            delivery:''
         }
     },
     methods:{
         mas(i){
-
             const index=this.ventas.findIndex(item=>item.id===i.id);
             if (index==-1){
                 i.cantidad=1;
+                i.subtotal=i.cantidad*i.precio
                 this.ventas.push(i);
             }else{
                 this.ventas[index].cantidad=this.ventas[index].cantidad+1;
+                this.ventas[index].subtotal=this.ventas[index].cantidad*this.ventas[index].precio;
                 // console.log(this.ventas[index].cantidad+1);
             }
 
@@ -236,11 +321,14 @@ export default {
             axios.post('/sales',{
                 ventas:this.ventas,
                 tipo:'RESERVA',
+                tipo2:this.tipo,
+                precio:this.total,
                 familia:this.familia,
                 dir:this.dir,
                 obs:this.obs,
                 hora:this.hora,
                 celular:this.celular,
+                delivery_id:this.delivery,
             }).then(res=>{
                 // this.datos=res.data;
                 console.log(res.data);

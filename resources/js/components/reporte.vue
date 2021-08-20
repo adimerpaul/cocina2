@@ -3,7 +3,7 @@
         <div class="row">
 
 
-            <div class="col-lg-12">
+            <div class="col-12">
                 <div class="ibox ">
                     <div class="ibox-title">
                         <h5>Reporte de ventas</h5>
@@ -61,28 +61,32 @@
                                 <table class="table table-striped table-bordered table-hover dataTables-example dataTable" id="DataTables_Table_0" aria-describedby="DataTables_Table_0_info" role="grid">
                                 <thead>
                                 <tr role="row">
-                                    <th class="sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending" style="width: 116px;">#</th>
+<!--                                    <th class="sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending" style="width: 116px;">#</th>-->
                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending" style="width: 148px;">Fecha venta</th>
-                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Platform(s): activate to sort column ascending" style="width: 132px;">Plato</th>
-                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Engine version: activate to sort column ascending" style="width: 98px;">Precio</th>
-                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" style="width: 66.0001px;">Usuario</th></tr>
+                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Platform(s): activate to sort column ascending" style="width: 132px;">Pedido</th>
+                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Engine version: activate to sort column ascending" style="width: 98px;">Detalle</th>
+                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Engine version: activate to sort column ascending" style="width: 98px;">Total</th>
+                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" style="width: 66.0001px;">Delivery</th></tr>
                                 </thead>
                                 <tbody>
-                                <tr class="gradeA odd" role="row">
-                                    <td class="sorting_1">Gecko</td>
-                                    <td>Firefox 1.0</td>
-                                    <td>Win 98+ / OSX.2+</td>
-                                    <td class="center">1.7</td>
-                                    <td class="center">A</td>
-                                </tr>
+<!--                                <tr class="gradeA odd" role="row">-->
+<!--                                    <td class="sorting_1">Gecko</td>-->
+<!--                                    <td>Firefox 1.0</td>-->
+<!--                                    <td>Win 98+ / OSX.2+</td>-->
+<!--                                    <td class="center">1.7</td>-->
+<!--                                    <td class="center">A</td>-->
+<!--                                </tr>-->
                                 </tbody>
                                 <tfoot>
                                 <tr>
-                                    <th rowspan="1" colspan="1">#</th>
+<!--                                    <th rowspan="1" colspan="1">#</th>-->
                                     <th rowspan="1" colspan="1">Fecha venta</th>
-                                    <th rowspan="1" colspan="1">Plato</th>
-                                    <th rowspan="1" colspan="1">Precio</th>
-                                    <th rowspan="1" colspan="1">Usuario</th></tr>
+                                    <th rowspan="1" colspan="1">Pedido</th>
+                                    <th rowspan="1" colspan="1">Detalle</th>
+                                    <th rowspan="1" colspan="1">Total</th>
+                                    <th rowspan="1" colspan="1">Delivery</th>
+
+                                </tr>
                                 </tfoot>
                             </table>
 
@@ -91,6 +95,10 @@
                     </div>
                 </div>
             </div>
+            <div class="col-12">
+                <apexchart type="bar" height="350" :options="chartOptions" :series="series"></apexchart>
+            </div>
+
         </div>
     </section>
 </template>
@@ -153,6 +161,51 @@ export default {
             date1:moment().format('YYYY-MM-DD'),
             date2:moment().format('YYYY-MM-DD'),
             moment:moment,
+            series: [{
+                data: [21, 22, 10, 28, 16, 21, 13, 30]
+            }],
+            chartOptions: {
+                chart: {
+                    height: 350,
+                    type: 'bar',
+                    events: {
+                        click: function(chart, w, e) {
+                            // console.log(chart, w, e)
+                        }
+                    }
+                },
+                // colors: colors,
+                plotOptions: {
+                    bar: {
+                        columnWidth: '45%',
+                        distributed: true,
+                    }
+                },
+                dataLabels: {
+                    enabled: false
+                },
+                legend: {
+                    show: false
+                },
+                xaxis: {
+                    categories: [
+                        ['John', 'Doe'],
+                        ['Joe', 'Smith'],
+                        ['Jake', 'Williams'],
+                        'Amber',
+                        ['Peter', 'Brown'],
+                        ['Mary', 'Evans'],
+                        ['David', 'Wilson'],
+                        ['Lily', 'Roberts'],
+                    ],
+                    labels: {
+                        style: {
+                            // colors: colors,
+                            fontSize: '12px'
+                        }
+                    }
+                }
+            },
         }
     },
     methods:{
@@ -165,27 +218,50 @@ export default {
             //     console.log(this.datos);
             // });
 
+            axios.get('/cantidades/'+this.date1+'/'+this.date2).then(res=>{
+                console.log(res.data)
+                let cantidades=[]
+                let cate=[]
+                res.data.forEach(r=>{
+                    cantidades.push(r.cantidad)
+                    cate.push([r.nombre])
+                })
+                this.series=[{
+                    data: cantidades
+                }]
 
+                this. chartOptions= {
+                        xaxis: {
+                            categories: cate
+                        }
+                }
+            })
             axios.get('/consulta/'+this.date1+'/'+this.date2).then(res=>{
                 this.datos=res.data;
                 // console.log(this.datos)
                 this.datatable.clear().draw();
                 let cont=0;
                 this.datos.forEach(r=>{
-                    console.log(r);
+                    // console.log(r);
                     cont++;
+                    let de=''
+                    r.details.forEach(d=>{
+                        de+=d.nombre +'-'+d.cantidad+'-'+d.subtotal+'Bs<br>'
+                    })
                     this.datatable.row.add([
-                        cont,
+                        // cont,
                         moment(r.created_at).format('DD-MM-YY HH:mm:ss'),
-                        r.product.nombre,
-                        r.precio,
+                        'N°'+r.numpedido,
+                        de,
+                        r.precio+' Bs',
                         // moment(r.salida).format('DD-MM-YY HH:mm:ss'),
                         // r.salida,
-                        r.user.name,
+                        r.delivery.nombre,
                         // r.estado,
                         // r.objetos,
                         // r.observaciones,
                     ]).draw(false)
+
                     //     <th rowspan="1" colspan="1">#</th>
                     // <th rowspan="1" colspan="1">Fecha venta</th>
                     // <th rowspan="1" colspan="1">Plato</th>

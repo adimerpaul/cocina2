@@ -17,4 +17,11 @@ class Sale extends Model
     {
         return $this->belongsTo('App\Models\User');
     }
+    public function delivery()
+    {
+        return $this->belongsTo('App\Models\Delivery');
+    }
+    public function details(){
+        return $this->hasMany('App\Models\Detail');
+    }
 }

@@ -17,6 +17,7 @@ class CreateSalesTable extends Migration
             $table->id();
             $table->double('precio',11,2);
             $table->string('tipo')->nullable()->default('VENTA');
+            $table->string('tipo2')->nullable()->default('RESTAURANTE');
             $table->integer('numpedido')->default(1);
             $table->string('familia')->nullable();
             $table->string('celular')->nullable();
@@ -25,8 +26,10 @@ class CreateSalesTable extends Migration
             $table->string('hora')->nullable();
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users');
-            $table->unsignedBigInteger('product_id');
-            $table->foreign('product_id')->references('id')->on('products');
+//            $table->unsignedBigInteger('product_id');
+//            $table->foreign('product_id')->references('id')->on('products');
+            $table->unsignedBigInteger('delivery_id')->default(1);
+            $table->foreign('delivery_id')->references('id')->on('deliveries');
             $table->timestamps();
         });
     }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Detail;
 use App\Models\Product;
 use App\Models\Sale;
 use Illuminate\Http\Request;
@@ -30,9 +31,10 @@ class SaleController extends Controller
     {
 //        return Sale::all();
         $sales=Sale::where('numpedido',$request->numpedido)->get();
-        foreach ($sales as $sale){
-            $p=Product::find($sale->product_id);
-            $p->cantidad=$p->cantidad+1;
+        $details=Detail::where('sale_id',$sales[0]->id)->get();
+        foreach ($details as $detail){
+            $p=Product::find($detail->product_id);
+            $p->cantidad=$p->cantidad+$detail->cantidad;
             $p->save();
         }
         DB::table('sales')->where('numpedido', $request->numpedido)->delete();
@@ -48,31 +50,54 @@ class SaleController extends Controller
     {
 //        return $request->ventas;
         $numopedido = Sale::max('numpedido')+1;
-
+        $sale=new Sale();
+        $sale->precio=$request->precio;
+        $sale->tipo=$request->tipo;
+        $sale->tipo2=$request->tipo2;
+        $sale->numpedido=$numopedido;
+        $sale->familia=$request->familia;
+        $sale->celular=$request->celular;
+        $sale->dir=$request->dir;
+        $sale->obs=$request->obs;
+        $sale->hora=$request->hora;
+        $sale->user_id=Auth::user()->id;
+        $sale->delivery_id=$request->delivery_id;
+        $sale->save();
         foreach ($request->ventas as $venta){
-            for ($i=0;$i<$venta['cantidad'];$i++){
-                $d=new Sale();
-                $d->precio=$venta['precio'];
-                $d->product_id=$venta['id'];
-                $d->numpedido=$numopedido;
-                $d->user_id=Auth::user()->id;
-                if ($request->tipo=='RESERVA'){
-                    $d->tipo='RESERVA';
-                    $d->familia=$request->familia;
-                    $d->celular=$request->celular;
-                    $d->dir=$request->dir;
-                    $d->obs=$request->obs;
-                    $d->hora=$request->hora;
-                }
-                $d->save();
-                $p=Product::find($venta['id']);
-                $p->cantidad=$p->cantidad-1;
-
-//                echo $request->tipo;
-                $p->save();
-            }
-
+            $d=new Detail();
+            $d->cantidad=$venta['cantidad'];
+            $d->subtotal=$venta['subtotal'];
+            $d->precio=$venta['precio'];
+            $d->nombre=$venta['nombre'];
+            $d->product_id=$venta['id'];
+            $d->sale_id=$sale->id;
+            $d->save();
         }
+//        foreach ($request->ventas as $venta){
+//            for ($i=0;$i<$venta['cantidad'];$i++){
+//                $d=new Sale();
+//                $d->precio=$venta['precio'];
+//                $d->delivery_id=$venta['delivery_id'];
+//                $d->product_id=$venta['id'];
+//                $d->numpedido=$numopedido;
+//                $d->user_id=Auth::user()->id;
+//                if ($request->tipo=='RESERVA'){
+//                    $d->tipo='RESERVA';
+//                    $d->familia=$request->familia;
+//                    $d->celular=$request->celular;
+//                    $d->dir=$request->dir;
+//                    $d->obs=$request->obs;
+//                    $d->hora=$request->hora;
+//                }
+//                $d->save();
+//                $p=Product::find($venta['id']);
+//                $p->cantidad=$p->cantidad-1;
+//
+////                echo $request->tipo;
+//                $p->save();
+//            }
+//
+//        }
     }
 
     /**
@@ -164,12 +189,15 @@ class SaleController extends Controller
 //                ->get();
 //        else
             return Sale::
-                with('user')
-                ->with('product')
+                with('delivery')
+                ->with('details')
 //                ->with('user')
                 ->where('tipo','VENTA')
                 ->whereDate('created_at','>=',$d1)
                 ->whereDate('created_at','<=',$d2)
                 ->get();
+    }
+    public function cantidades($d1,$d2){
+        return DB::select("SELECT nombre,SUM(cantidad) as cantidad FROM `details` WHERE date(created_at)>=date('".$d1."') AND date(created_at)<=date('".$d2."') GROUP BY nombre");
     }
 }

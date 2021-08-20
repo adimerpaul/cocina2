@@ -31,24 +31,53 @@
                                 <tr role="row">
                                     <th class="sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Rendering engine: activate to sort column descending" >#</th>
 <!--                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Browser: activate to sort column ascending" style="width: 148px;">Fecha reserva</th>-->
-                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Platform(s): activate to sort column ascending" >Pedido</th>
+                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Platform(s): activate to sort column ascending" >Tipo</th>
                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Engine version: activate to sort column ascending" >Familia</th>
-                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Engine version: activate to sort column ascending" >Total</th>
-                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Engine version: activate to sort column ascending" >Productos</th>
-                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" >Opciones</th></tr>
+                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Engine version: activate to sort column ascending" >Direccion</th>
+                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="Engine version: activate to sort column ascending" >Celular</th>
+
+                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" >Hora</th>
+                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" >Productos</th>
+                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" >Observacion</th>
+                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" >Delivery</th>
+                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" >Opciones</th>
+                                </tr>
                                 </thead>
                                 <tbody>
+<!--                                <tr v-for="(i,index) in datos" :key="index" class="gradeA odd" role="row">-->
+<!--                                    <td class="sorting_1">{{index+1}}</td>-->
+<!--                                    <td>Numero {{i.numpedido}}</td>-->
+<!--                                    <td>{{i.familia}} {{i.celular}} {{i.dir}} {{i.obs}} {{i.hora}}</td>-->
+<!--                                    <td>{{i.total}}</td>-->
+<!--                                    <td>-->
+<!--                                        <div v-for="p in i.products">{{p.nombre}}</div>-->
+<!--                                    </td>-->
+<!--                                    <td class="center">-->
+<!--                                        <button @click="cancelar(i)" class="btn btn-danger btn-xs"> <i class="fa fa-close"></i> Cancelar</button>-->
+<!--                                        <button @click="entregar(i)" class="btn btn-success btn-xs"> <i class="fa fa-save"></i> Entregar</button>-->
+<!--                                    </td>-->
+<!--                                </tr>-->
                                 <tr v-for="(i,index) in datos" :key="index" class="gradeA odd" role="row">
-                                    <td class="sorting_1">{{index+1}}</td>
-                                    <td>Numero {{i.numpedido}}</td>
-                                    <td>{{i.familia}} {{i.celular}} {{i.dir}} {{i.obs}} {{i.hora}}</td>
-                                    <td>{{i.total}}</td>
+<!--                                    <td class="sorting_1">{{index+1}}</td>-->
+                                    <td>{{i.numpedido}}</td>
+                                    <td>{{i.tipo2}}</td>
+                                    <td>FAMILIA: {{i.familia}}</td>
+                                    <td>DIRECCION: {{i.dir}} </td>
+                                    <td>CELULAR: {{i.celular}}</td>
+
+                                    <td>HORA: {{i.hora}}</td>
                                     <td>
-                                        <div v-for="p in i.products">{{p.nombre}}</div>
+                                        <div v-for="(detail,index) in i.details" :key="index">{{detail.nombre}} {{detail.cantidad}} {{detail.subtotal}}Bs</div>
                                     </td>
+                                    <td>OBS.:{{i.obs}}</td>
+                                    <td>{{i.delivery.nombre}}</td>
                                     <td class="center">
+                                        <div v-if="i.tipo!='VENTA'" class="btn-group">
                                         <button @click="cancelar(i)" class="btn btn-danger btn-xs"> <i class="fa fa-close"></i> Cancelar</button>
                                         <button @click="entregar(i)" class="btn btn-success btn-xs"> <i class="fa fa-save"></i> Entregar</button>
+                                        </div>
+                                        <span v-else class="badge badge-info">Realizado la venta</span>
+
                                     </td>
                                 </tr>
                                 </tbody>
@@ -96,25 +125,26 @@ export default {
             // });
             this.datos=[];
             axios.get('/reservas').then(res=>{
-                // this.datos=res.data;
-                res.data.forEach(r=>{
-                    let index=this.datos.findIndex(item=>item.numpedido===r.numpedido)
-                    if (index==-1){
-                        this.datos.push({
-                            total:r.precio,
-                            numpedido:r.numpedido,
-                            familia:r.familia,
-                            celular:r.celular,
-                            dir:r.dir,
-                            obs:r.obs,
-                            hora:r.hora,
-                            products:[r.product]});
-                        // this.datos[index].products=;
-                    }else{
-                        this.datos[index].total=this.datos[index].total+r.precio;
-                        this.datos[index].products.push(r.product);
-                    }
-                })
+                this.datos=res.data;
+                // console.log(res.data)
+                // res.data.forEach(r=>{
+                //     let index=this.datos.findIndex(item=>item.numpedido===r.numpedido)
+                //     if (index==-1){
+                //         this.datos.push({
+                //             total:r.precio,
+                //             numpedido:r.numpedido,
+                //             familia:r.familia,
+                //             celular:r.celular,
+                //             dir:r.dir,
+                //             obs:r.obs,
+                //             hora:r.hora,
+                //             products:[r.product]});
+                //         // this.datos[index].products=;
+                //     }else{
+                //         this.datos[index].total=this.datos[index].total+r.precio;
+                //         this.datos[index].products.push(r.product);
+                //     }
+                // })
             });
         },
         guardar(){
