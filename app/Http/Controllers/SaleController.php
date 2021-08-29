@@ -16,6 +16,9 @@ class SaleController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function mitotal(){
+        return  DB::select("select SUM(subtotal) as total FROM details");
+    }
     public function index()
     {
         return Sale::all();

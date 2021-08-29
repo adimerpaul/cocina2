@@ -133,7 +133,7 @@ class ProductController extends Controller
 
     public function productSale()
     {
-        return Product::where('estado','=','VISIBLE')->get();
+        return Product::with('detail')->where('estado','=','VISIBLE')->get();
     }
 
     /**

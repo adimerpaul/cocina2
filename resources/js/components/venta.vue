@@ -6,6 +6,7 @@
                     <h3>
                         Total: {{total}} Bs.
                         <button @click="reset" class="btn btn-primary btn-sm"><i class="fa fa-refresh"></i> Reset</button>
+                        Total del dia : {{totale}} Bs.
 <!--                        <button @click="guardar" class="btn btn-success btn-sm"><i class="fa fa-save"></i> Vender</button>-->
                         <form @submit.prevent="reservar">
                             <div class="form-group row">
@@ -120,7 +121,7 @@
                             </div>
                             <div class="product-desc">
                                 <span class="product-price">
-                                    Bs {{i.precio}}
+                                    Dis.:{{i.cantidad}} - Bs {{i.precio}}
                                 </span>
 <!--                                                        <div class="text-muted">Disponib: <b>{{i.cantidad}}</b></div>-->
 <!--                                                        <div class="text-muted">Vendidos: <b>{{i.sale.length}}</b></div>-->
@@ -218,7 +219,8 @@
 import axios from 'axios';
 export default {
     mounted() {
-        this.misdatos();
+        this.misdatos()
+        this.mitotal()
         axios.get('/delivery').then(res=>{
             // console.log(res.data)
             this.deliveries=res.data
@@ -239,10 +241,16 @@ export default {
             celular:'',
             tipo:'RESTAURANT',
             deliveries:[],
-            delivery:''
+            delivery:'',
+            totale:0,
         }
     },
     methods:{
+        mitotal(){
+        axios.post('/mitotal').then(res=>{
+            this.totale=res.data[0].total
+        });
+        },
         mas(i){
             const index=this.ventas.findIndex(item=>item.id===i.id);
             if (index==-1){
@@ -338,7 +346,8 @@ export default {
                     duration: 3000,
                     dismissible: true
                 });
-                // this.misdatos();
+                this.misdatos();
+                this.mitotal();
                 this.ventas=[];
             });
         },
@@ -409,7 +418,15 @@ export default {
         misdatos(){
             axios.get('/productSale').then(res=>{
                 this.datos=res.data;
-                // console.log(this.datos);
+                console.log(this.datos);
+                // this.datos.forEach(r=>{
+                //     let sum=0
+                //     // r.details.forEach(r=>{
+                //     //     // let s/um=0;
+                //     //     sum=sum+r.cantidad
+                //     // })
+                //     // this.datos.
+                // })
             });
         },
         // vendidos:async function (i){

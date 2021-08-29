@@ -50,4 +50,6 @@ Route::get('/reservas',[\App\Http\Controllers\ProductController::class,'reservas
 Route::post('/cancelar',[\App\Http\Controllers\SaleController::class,'cancelar'])->middleware('auth');
 Route::post('/entregar',[\App\Http\Controllers\SaleController::class,'entregar'])->middleware('auth');
 Route::get('/historial',[\App\Http\Controllers\SaleController::class,'historial'])->middleware('auth');
+Route::post('/mitotal',[\App\Http\Controllers\SaleController::class,'mitotal'])->middleware('auth');
+
 //Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

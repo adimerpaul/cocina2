@@ -19,4 +19,7 @@ class Product extends Model
             ->whereDate('created_at','=',now())
             ->groupBy('product_id');
     }
+    public function detail(){
+        return $this->hasMany(Detail::class);
+    }
 }

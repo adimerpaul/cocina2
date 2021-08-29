@@ -38,6 +38,7 @@
 
                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" >Hora</th>
                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" >Productos</th>
+                                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" >Total</th>
                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" >Observacion</th>
                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" >Delivery</th>
                                     <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" aria-label="CSS grade: activate to sort column ascending" >Opciones</th>
@@ -60,15 +61,20 @@
                                 <tr v-for="(i,index) in datos" :key="index" class="gradeA odd" role="row">
 <!--                                    <td class="sorting_1">{{index+1}}</td>-->
                                     <td>{{i.numpedido}}</td>
-                                    <td>{{i.tipo2}}</td>
+                                    <td>
+                                        <div class="badge badge-info" v-if="i.tipo2=='RESTAURANT'">{{i.tipo2}}</div>
+                                        <div class="badge badge-success" v-if="i.tipo2=='ENVIAR'">{{i.tipo2}}</div>
+                                        <div class="badge badge-primary" v-if="i.tipo2=='RECOGER'">{{i.tipo2}}</div>
+                                    </td>
                                     <td>FAMILIA: {{i.familia}}</td>
                                     <td>DIRECCION: {{i.dir}} </td>
                                     <td>CELULAR: {{i.celular}}</td>
 
                                     <td>HORA: {{i.hora}}</td>
                                     <td>
-                                        <div v-for="(detail,index) in i.details" :key="index">{{detail.nombre}} {{detail.cantidad}} {{detail.subtotal}}Bs</div>
+                                        <div v-for="(detail,index) in i.details" :key="index">{{detail.cantidad}} {{detail.nombre}}  {{detail.subtotal}}Bs</div>
                                     </td>
+                                    <td>TOTAL:{{i.precio}}</td>
                                     <td>OBS.:{{i.obs}}</td>
                                     <td>{{i.delivery.nombre}}</td>
                                     <td class="center">
