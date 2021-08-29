@@ -35,19 +35,19 @@
                                 <div class="col-sm-4">
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" name="exampleRadios" id="tipo1" value="RESTAURANT" v-model="tipo">
-                                        <label class="form-check-label" for="tipo1">
+                                        <label class="form-check-label badge badge-info" for="tipo1">
                                             RESTAURANT
                                         </label>
                                     </div>
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" name="tipo" id="tipo2" value="ENVIAR" v-model="tipo">
-                                        <label class="form-check-label" for="tipo2">
+                                        <label class="form-check-label badge badge-success" for="tipo2">
                                             ENVIAR
                                         </label>
                                     </div>
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" name="tipo" id="tipo3" value="RECOGER" v-model="tipo" >
-                                        <label class="form-check-label" for="tipo3">
+                                        <label class="form-check-label badge badge-primary" for="tipo3">
                                             RECOGER
                                         </label>
                                     </div>
