@@ -178,7 +178,8 @@ class SaleController extends Controller
      */
     public function destroy($id)
     {
-        Sale::truncate();
+//        Sale::truncate();
+        DB::select("        DELETE FROM sales");
     }
     public function consulta($d1,$d2)
     {
