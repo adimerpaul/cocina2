@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Agregado;
 use App\Models\Detail;
 use App\Models\Product;
 use App\Models\Sale;
@@ -75,7 +76,34 @@ class SaleController extends Controller
             $d->product_id=$venta['id'];
             $d->sale_id=$sale->id;
             $d->save();
+
+            $p=Product::find($venta['id']);
+            $p->cantidad=$p->cantidad-$venta['cantidad'];
+            $p->save();
+            $a=Agregado::where('product_id',$venta['id']);
+//            echo $a->count().'---';
+            if ($a->count()>0){
+                foreach ($a->get() as $pro){
+//                                echo $pro['product_id2'].'---';
+                    $p=Product::find($pro['product_id2']);
+                    $p->cantidad=$p->cantidad-$pro['cantidad'];
+                    $p->save();
+                    $d=new Detail();
+
+                    $d->cantidad=$pro['cantidad'];
+                    $d->subtotal=0;
+                    $d->precio=0;
+                    $d->nombre=$p['nombre'];
+                    $d->product_id=$pro['product_id2'];
+                    $d->sale_id=$sale->id;
+                    $d->save();
+
+
+
+                }
+            }
         }
+
 //        foreach ($request->ventas as $venta){
 //            for ($i=0;$i<$venta['cantidad'];$i++){
 //                $d=new Sale();

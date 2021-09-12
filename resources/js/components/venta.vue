@@ -35,19 +35,19 @@
                                 <div class="col-sm-4">
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" name="exampleRadios" id="tipo1" value="RESTAURANT" v-model="tipo">
-                                        <label class="form-check-label badge badge-info" for="tipo1">
+                                        <label class="form-check-label badge badge-warning" for="tipo1">
                                             RESTAURANT
                                         </label>
                                     </div>
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" name="tipo" id="tipo2" value="ENVIAR" v-model="tipo">
-                                        <label class="form-check-label badge badge-success" for="tipo2">
+                                        <label class="form-check-label badge badge-danger" for="tipo2">
                                             ENVIAR
                                         </label>
                                     </div>
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" name="tipo" id="tipo3" value="RECOGER" v-model="tipo" >
-                                        <label class="form-check-label badge badge-primary" for="tipo3">
+                                        <label class="form-check-label badge badge-success" for="tipo3">
                                             RECOGER
                                         </label>
                                     </div>
@@ -121,7 +121,10 @@
                             </div>
                             <div class="product-desc">
                                 <span class="product-price">
-                                    Dis.:{{i.cantidad}} - Bs {{i.precio}}
+<!--                                    <template v-if="i.details.length==1">-->
+<!--                                    <div class="badge badge-warning">Ve:{{i.details[0].total}}</div>-->
+<!--                                    </template>-->
+                                    <div class="badge badge-warning">Ve:{{i.vendido}}</div><div class="badge badge-secondary">Di:{{i.cantidad}}</div>Bs {{ parseInt( i.precio)}}
                                 </span>
 <!--                                                        <div class="text-muted">Disponib: <b>{{i.cantidad}}</b></div>-->
 <!--                                                        <div class="text-muted">Vendidos: <b>{{i.sale.length}}</b></div>-->
@@ -302,6 +305,7 @@ export default {
         },
         reset(){
             this.ventas=[];
+            this.misdatos()
         },
         reservar(){
             if(this.familia==''){

@@ -133,7 +133,12 @@ class ProductController extends Controller
 
     public function productSale()
     {
-        return Product::with('detail')->where('estado','=','VISIBLE')->get();
+//        return Product::with('details')->with('detail')->where('estado','=','VISIBLE')->get();
+        return DB::select("SELECT p.id,p.photo,p.nombre,p.cantidad,p.precio,(
+            select sum(d.cantidad) from details d where d.product_id=p.id
+        )vendido
+        FROM products p
+        WHERE estado='VISIBLE'");
     }
 
     /**
@@ -206,9 +211,11 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Product $product)
     {
-        $d=Product::find($id);
-        $d->delete();
+//        return "a";
+//        $d=Product::find($id);
+//        $d->delete();
+        $product->delete();
     }
 }

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateDetailsTable extends Migration
+class CreateAgregadosTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,13 @@ class CreateDetailsTable extends Migration
      */
     public function up()
     {
-        Schema::create('details', function (Blueprint $table) {
+        Schema::create('agregados', function (Blueprint $table) {
             $table->id();
             $table->integer('cantidad');
-            $table->double('subtotal',11,2);
-            $table->double('precio',11,2);
-            $table->string('nombre');
-            $table->unsignedBigInteger('sale_id');
-            $table->foreign('sale_id')->references('id')->on('sales')->cascadeOnDelete();
             $table->unsignedBigInteger('product_id');
             $table->foreign('product_id')->references('id')->on('products')->cascadeOnDelete();
+            $table->unsignedBigInteger('product_id2');
+            $table->foreign('product_id2')->references('id')->on('products')->cascadeOnDelete();
             $table->timestamps();
         });
     }
@@ -34,6 +31,6 @@ class CreateDetailsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('details');
+        Schema::dropIfExists('agregados');
     }
 }

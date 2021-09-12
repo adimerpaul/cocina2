@@ -62,9 +62,9 @@
 <!--                                    <td class="sorting_1">{{index+1}}</td>-->
                                     <td>{{i.numpedido}}</td>
                                     <td>
-                                        <div class="badge badge-info" v-if="i.tipo2=='RESTAURANT'">{{i.tipo2}}</div>
-                                        <div class="badge badge-success" v-if="i.tipo2=='ENVIAR'">{{i.tipo2}}</div>
-                                        <div class="badge badge-primary" v-if="i.tipo2=='RECOGER'">{{i.tipo2}}</div>
+                                        <div class="badge badge-warning" v-if="i.tipo2=='RESTAURANT'">{{i.tipo2}}</div>
+                                        <div class="badge badge-danger" v-if="i.tipo2=='ENVIAR'">{{i.tipo2}}</div>
+                                        <div class="badge badge-success" v-if="i.tipo2=='RECOGER'">{{i.tipo2}}</div>
                                     </td>
                                     <td>FAMILIA: {{i.familia}}</td>
                                     <td>DIRECCION: {{i.dir}} </td>

@@ -78,6 +78,58 @@
                             </div>
                         </div>
                     </div>
+                    <div class="modal inmodal fade" id="aumentar" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+                                    <h4 class="modal-title">Aumentar productos </h4>
+                                </div>
+                                <div class="modal-body">
+                                    <form >
+                                        <div class="form-group row">
+                                            <label class="col-lg-1 col-form-label" >Producto</label>
+                                            <div class="col-lg-5">
+                                                <select name="" id="ttipo" class="form-control" v-model="dato.producto_id">
+                                                    <option value="">Seleccionar...</option>
+                                                    <option v-for="(p,index) in datos" :key="index" :value="p.id">{{p.nombre}}</option>
+                                                </select>
+                                            </div>
+                                            <label class="col-lg-1 col-form-label">Cantidad</label>
+                                            <div class="col-lg-3">
+                                                <input type="number" step="0.01"  name="cantidad" placeholder="Cantidad" v-model="dato.cantidad" class="form-control">
+                                            </div>
+                                            <div class="col-lg-2">
+                                                <button type="button" class="btn btn-success" @click="agregar" > <i class="fa fa-plus-square-o"></i> Agregar</button>
+                                            </div>
+                                        </div>
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Producto</th>
+                                                    <th>Cantidad</th>
+                                                    <th>Opciones</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr v-for="(a,i) in agregados" :key="i" >
+                                                    <td>{{i+1}}</td>
+                                                    <td>{{a.nombre}}</td>
+                                                    <td>{{a.cantidad}}</td>
+                                                    <td><button class="btn btn-danger btn-sm" type="button" @click="eliminaragregado(a.id)"><i class="fa fa-trash"></i></button></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal"> <i class="fa fa-trash"></i> Cerrar</button>
+<!--                                            <button type="submit" class="btn btn-warning"><i class="fa fa-save"></i> Modificar</button>-->
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="modal inmodal fade" id="modificar" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
                         <div class="modal-dialog modal-lg">
                             <div class="modal-content">
@@ -205,10 +257,14 @@
                                 <span class="badge " :class="i.estado=='VISIBLE'?'badge-primary':'badge-warning'">{{ i.estado }}</span>
                             </td>
                             <td>
-                                <button @click="modificar(i)" class="btn btn-warning btn-xs"><i class="fa fa-pencil"></i></button>
-                                <button @click="foto(i)" class="btn btn-success btn-xs"> <i class="fa fa-camera"></i> </button>
-                                <button @click="mostrar(i)" class="btn btn-info btn-xs"><i class="fa fa-eye"></i></button>
-                                <button @click="eliminar(i)" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></button>
+                                <div class="btn-group">
+                                    <button @click="modificar(i)" class="btn btn-warning btn-xs"><i class="fa fa-pencil"></i></button>
+                                    <button @click="aumentar(i)" class="btn btn-primary btn-xs"><i class="fa fa-plus-circle"></i></button>
+                                    <button @click="foto(i)" class="btn btn-success btn-xs"> <i class="fa fa-camera"></i> </button>
+                                    <button @click="mostrar(i)" class="btn btn-info btn-xs"><i class="fa fa-eye"></i></button>
+                                    <button @click="eliminar(i)" class="btn btn-danger btn-xs"><i class="fa fa-trash"></i></button>
+                                </div>
+
                             </td>
                         </tr>
                         </tbody>
@@ -236,12 +292,27 @@ export default {
             datos:[],
             dato:{},
             imagen : null,
+            agregados:[]
         }
     },
     methods:{
+        misagregados(id){
+            axios.get('/misagregados/'+id).then(res=>{
+                // console.log(res.data)
+                this.agregados=res.data
+                // this.misagregados(this.dato.id)
+            })
+        },
         getImage(event){
             //Asignamos la imagen a  nuestra data
             this.imagen = event.target.files[0];
+        },
+        eliminaragregado(id){
+            axios.delete('/agregado/'+id).then(res=>{
+                // console.log(res.data)
+                // this.agregados=res.data
+                this.misagregados(this.dato.id)
+            })
         },
         crear(){
             this.dato={};
@@ -285,6 +356,23 @@ export default {
                 //     duration: 3000,
                 //     dismissible: true
                 // });
+                // this.dato={};
+            })
+        },
+        agregar(){
+            axios.post('/agregado',{
+                product_id:this.dato.id,
+                product_id2:this.dato.producto_id,
+                cantidad:this.dato.cantidad,
+            }).then(res=>{
+                console.log(res.data)
+                this.$toast.open({
+                    message: "Dato agregado",
+                    type: "success",
+                    duration: 3000,
+                    dismissible: true
+                });
+                this.misagregados(this.dato.id)
                 // this.dato={};
             })
         },
@@ -346,8 +434,14 @@ export default {
             })
         },
         modificar(i){
-            $('#modificar').modal('show');
-            this.dato=i;
+            $('#modificar').modal('show')
+            this.dato=i
+        },
+        aumentar(i){
+            $('#aumentar').modal('show')
+            this.dato=i
+            this.dato.cantidad=1
+            this.misagregados(i.id)
         },
         foto(i){
             $('#foto').modal('show');
@@ -369,6 +463,14 @@ export default {
                         // $('#modal-default').modal('hide');
                         this.$toast.open({
                             message: "Dato Eliminado",
+                            type:"error",
+                            duration: 3000,
+                            dismissible: true
+                        });
+                        this.dato={};
+                    }).catch(err=>{
+                        this.$toast.open({
+                            message: err.response.data.message,
                             type:"error",
                             duration: 3000,
                             dismissible: true

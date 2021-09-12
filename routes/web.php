@@ -37,6 +37,9 @@ Route::get('/reserva', function () {
 
 Auth::routes();
 Route::resource('/product',App\Http\Controllers\ProductController::class)->middleware('auth');
+Route::resource('/agregado',App\Http\Controllers\AgregadoController::class)->middleware('auth');
+Route::get('/misagregados/{id}',[App\Http\Controllers\AgregadoController::class,'misagregados'])->middleware('auth');
+
 Route::post('/product/{id}',[\App\Http\Controllers\ProductController::class,'modificar'])->middleware('auth');
 Route::resource('/sale',App\Http\Controllers\SaleController::class)->middleware('auth');
 Route::resource('/delivery',App\Http\Controllers\DeliveryController::class)->middleware('auth');
