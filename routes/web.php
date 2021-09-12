@@ -34,9 +34,14 @@ Route::get('/reporte', function () {
 Route::get('/reserva', function () {
     return view('home');
 })->middleware('auth');
+Route::get('/inventarios', function () {
+    return view('home');
+})->middleware('auth');
 
 Auth::routes();
 Route::resource('/product',App\Http\Controllers\ProductController::class)->middleware('auth');
+Route::resource('/inventario',App\Http\Controllers\InventarioController::class)->middleware('auth');
+Route::resource('/log',App\Http\Controllers\LogController::class)->middleware('auth');
 Route::resource('/agregado',App\Http\Controllers\AgregadoController::class)->middleware('auth');
 Route::get('/misagregados/{id}',[App\Http\Controllers\AgregadoController::class,'misagregados'])->middleware('auth');
 

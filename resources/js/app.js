@@ -31,6 +31,8 @@ import sales from './components/sales';
 import reporte from './components/reporte';
 import venta from './components/venta';
 import reserva from './components/reserva';
+import inventario from "./components/inventario";
+
 const routes = [
     { path: '/home', component: home },
     { path: '/reserva', component: reserva },
@@ -38,6 +40,7 @@ const routes = [
     { path: '/sales', component: sales },
     { path: '/venta', component: venta },
     { path: '/reporte', component: reporte },
+    { path: '/inventarios', component: inventario },
 ]
 const router = new VueRouter({
     mode: 'history',

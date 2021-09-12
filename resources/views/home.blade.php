@@ -108,6 +108,16 @@
                             </a>
                         </li>
                     </router-link>
+                    <router-link
+                        to="/inventarios"
+                        v-slot="{ href, route, navigate, isActive, isExactActive }"
+                    >
+                        <li class="treeview" :class="[isActive && 'active', isExactActive && '']">
+                            <a :href="href" @click="navigate">
+                                <i class="fa fa-shopping-bag"></i> <span class="nav-label"> Inventario</span>
+                            </a>
+                        </li>
+                    </router-link>
                     <li class="treeview" >
                         <a href="" @click.prevent="vaciar">
                             <i class="fa fa-bank"></i> <span class="nav-label"> vaciar base de datos</span>
