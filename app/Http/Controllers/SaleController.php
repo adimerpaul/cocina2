@@ -86,7 +86,7 @@ class SaleController extends Controller
                 foreach ($a->get() as $pro){
 //                                echo $pro['product_id2'].'---';
                     $p=Product::find($pro['product_id2']);
-                    $p->cantidad=$p->cantidad-$pro['cantidad'];
+                    $p->cantidad=$p->cantidad-$venta['cantidad'];
                     $p->save();
                     $d=new Detail();
 
