@@ -90,7 +90,7 @@ class SaleController extends Controller
                     $p->save();
                     $d=new Detail();
 
-                    $d->cantidad=$pro['cantidad'];
+                    $d->cantidad=$venta['cantidad'];
                     $d->subtotal=0;
                     $d->precio=0;
                     $d->nombre=$p['nombre'];
